@@ -1,0 +1,103 @@
+﻿@using YunoBlog.Models
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" type="text/css" media="all" href="~/Styles/Style.css" />
+    <script type="text/javascript" src="~/Scripts/jQuery.js"></script>
+    <script type="text/javascript" src="~/Scripts/Main.js"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>@ViewBag.Title - @ViewBag.SitePostfix</title>
+</head>
+<body>
+    <div class="bg m">
+        <div class="l"></div>
+        <div class="c">
+            <div class="cm"></div>
+        </div>
+        <div class="m"></div>
+    </div>
+    <div id="container">
+        <div class="header m">
+            <div class="search">
+                <div id="search">
+                    <form action="/" method="post">
+                        <input type="text" placeholder="搜索" maxlength="50" name="s" id="s" />
+                        <input type="submit" id="btn" value="搜索" />
+                    </form>
+                </div>
+            </div>
+            <div class="nav">
+                <ul>
+                    <li id="navHome"><a href="~/">Home</a></li>
+                    @foreach (NavBar item in ViewBag.Navs)
+                    {
+                        <li id="p_@item.ID">@Html.ActionLink(item.Title, "Show", "Page", new { id = item.ID }, "")</li>
+                    }
+                </ul>
+            </div>
+        </div>
+        <div id="content">
+            <script>window.enable_autoHighlight = '#main>.article';</script>
+            <div id="main">
+                @RenderBody()
+            </div>
+            <div id="sidebar">
+                <div class="module widget_categories">
+                    <div class="title">按分类</div>
+                    <ul>
+                        @foreach (Category item in ViewBag.Categories)
+                        {
+                            <li class='cat-item'>@Html.ActionLink(item.Title, "Index", "Home", new { c = item.ID }, null)  (@item.Contents.Count())</li>
+                        }
+                    </ul>
+                </div>
+                <div class="module widget_categories">
+                    <div class="title">按月份</div>
+                    <ul>
+                        @foreach (Calendar item in ViewBag.Calendars)
+                        {
+                            <li class='cat-item'>@Html.ActionLink(item.Display, "Index", "Home", new { y = item.Year, m = item.Month }, null)  (@item.Count)</li>
+                        }
+                    </ul>
+                </div>
+                <div class="module widget_links">
+                    <div class="title">友情链接</div>
+                    <ul class='xoxo blogroll'>
+                        @foreach (Link item in ViewBag.Links)
+                        {
+                            <li class='cat-item'><a href="@item.URL" target="_blank">@item.Title</a></li>
+                        }
+                    </ul>
+                </div>
+                <div class="module widget_meta">
+                    <div class="title">功能</div>
+                    <ul>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li>@Html.ActionLink("站点设置", "General", "Admin", null, null)</li>
+                            <li>@Html.ActionLink("文章管理", "Articles", "Admin", null, null)</li>
+                            <li>@Html.ActionLink("页面管理", "Pages", "Admin", null, null)</li>
+                            <li>@Html.ActionLink("分类管理", "Categories", "Admin", null, null)</li>
+                            <li>@Html.ActionLink("链接管理", "Links", "Admin", null, null)</li>
+                            <li>@Html.ActionLink("注销", "Logout", "Admin", new { sid = Session["Sid"].ToString() }, null)</li>
+                        }
+                        else
+                        {
+                            <li>@Html.ActionLink("登录", "Login", "Admin", null, null)</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+            <br clear="both" />
+        </div>
+    </div>
+    <div class="footer m">
+        <div class="content">
+            Copyright(C) 2014 <a href="http://www.4321.io" class="profile">www.4321.io</a>
+        </div>
+        <div class="engine">Powered by YunoBlog</div>
+        <div class="back"><a href="#" rel="nofollow" title="Top">返回顶部</a></div>
+    </div>
+</body>
+</html>

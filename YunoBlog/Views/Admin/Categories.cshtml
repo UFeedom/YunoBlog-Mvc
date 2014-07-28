@@ -1,0 +1,122 @@
+﻿@model IEnumerable<YunoBlog.Models.Category>
+@{
+    ViewBag.Title = "分类";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="article">
+    <div class="header">
+        <div class="title">分类</div>
+    </div>
+    <div class="section entry">
+        <p>@Html.ActionLink("新建分类", "CreateCategory", "Admin", null, null)</p>
+        <table style="width:100%">
+            <thead>
+                <tr>
+                    <th>分类名称</th>
+                    <th>优先级</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td><span cid="@item.ID" class="category_title">@item.Title</span><input type="text" class="category_title_edit" cid="@item.ID" value="@item.Title" /></td>
+                        <td><span cid="@item.ID" class="category_priority">@item.Priority</span><input type="text" class="category_priority_edit" cid="@item.ID" value="@item.Priority" /></td>
+                        <td>
+                            <a href="javascript:void(0)" class="modify" cid="@item.ID">编辑</a>
+                            @Html.ActionLink("删除", "DeleteCategory", "Admin", new { id = item.ID }, new { @class = "delete", cid=item.ID })
+                            <a href="javascript:void(0)" class="save" cid="@item.ID">保存</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <script>
+            $(".save").hide();
+            $(".category_title_edit").hide();
+            $(".category_priority_edit").hide();
+            $(".modify").click(function () {
+                $(".save").hide();
+                $(".delete").show();
+                $(".modify").show();
+                $(".category_title_edit").hide();
+                $(".category_priority_edit").hide();
+                $(".category_title").fadeIn();
+                $(".category_priority").fadeIn();
+                var cid = $(this).attr("cid");
+                $(this).hide();
+                $(".delete").unbind("each").each(function () {
+                    if ($(this).attr("cid") == cid) {
+                        $(this).hide();
+                    }
+                });
+                $(".save").unbind("each").each(function () {
+                    if ($(this).attr("cid") == cid) {
+                        $(this).fadeIn();
+                    }
+                });
+                $(".category_title").unbind("each").each(function () {
+                    if ($(this).attr("cid") == cid) {
+                        $(this).hide();
+                    }
+                });
+                $(".category_title_edit").unbind("each").each(function () {
+                    if ($(this).attr("cid") == cid) {
+                        $(this).fadeIn();
+                    }
+                });
+                $(".category_priority").unbind("each").each(function () {
+                    if ($(this).attr("cid") == cid) {
+                        $(this).hide();
+                    }
+                });
+                $(".category_priority_edit").unbind("each").each(function () {
+                    if ($(this).attr("cid") == cid) {
+                        $(this).fadeIn();
+                    }
+                });
+            });
+            $(".save").click(function () {
+                var cid = $(this).attr("cid");
+                var priority, title;
+                $(".category_title_edit").unbind("each").each(function () {
+                    if ($(this).attr("cid") == cid) {
+                        title = $(this).val();
+                        return;
+                    }
+                });
+                $(".category_priority_edit").unbind("each").each(function () {
+                    if ($(this).attr("cid") == cid) {
+                        priority = $(this).val();
+                        return;
+                    }
+                });
+                $.post("/Admin/Categories",
+                    {
+                        ID: cid,
+                        Priority: priority,
+                        Title: title
+                    },function(){
+                        $(".category_title").unbind("each").each(function () {
+                            if ($(this).attr("cid") == cid) {
+                                $(this).html(title);
+                            }
+                        });
+                        $(".category_priority").unbind("each").each(function () {
+                            if ($(this).attr("cid") == cid) {
+                                $(this).html(priority);
+                            }
+                        });
+                        $(".save").hide();
+                        $(".delete").show();
+                        $(".modify").show();
+                        $(".category_title_edit").hide();
+                        $(".category_priority_edit").hide();
+                        $(".category_title").fadeIn();
+                        $(".category_priority").fadeIn();
+                    });
+            });
+        </script>
+    </div>
+</div>

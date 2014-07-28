@@ -1,0 +1,152 @@
+﻿@model IEnumerable<YunoBlog.Models.Link>
+@{
+    ViewBag.Title = "友情链接";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="article">
+    <div class="header">
+        <div class="title">友情链接</div>
+    </div>
+    <div class="section entry">
+        <p>@Html.ActionLink("新建分类", "CreateLink", "Admin", null, null)</p>
+        <table style="width:100%">
+            <thead>
+                <tr>
+                    <th>标题</th>
+                    <th>URL</th>
+                    <th>优先级</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td><span cid="@item.ID" class="Link_title">@item.Title</span><input type="text" class="Link_title_edit" cid="@item.ID" value="@item.Title" /></td>
+                        <td><span cid="@item.ID" class="Link_url">@item.URL</span><input type="text" class="Link_url_edit" cid="@item.ID" value="@item.URL" /></td>
+                        <td><span cid="@item.ID" class="Link_priority">@item.Priority</span><input type="text" class="Link_priority_edit" cid="@item.ID" value="@item.Priority" /></td>
+                        <td>
+                            <a href="javascript:void(0)" class="modify" cid="@item.ID">编辑</a>
+                            @Html.ActionLink("删除", "DeleteLink", "Admin", new { id = item.ID }, new { @class = "delete", cid = item.ID })
+                            <a href="javascript:void(0)" class="save" cid="@item.ID">保存</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <script>
+            $(".save").hide();
+            $(".Link_title_edit").hide();
+            $(".Link_priority_edit").hide();
+            $(".Link_url_edit").hide();
+            $(".modify").click(function () {
+                $(".save").hide();
+                $(".delete").show();
+                $(".modify").show();
+                $(".Link_title_edit").hide();
+                $(".Link_priority_edit").hide();
+                $(".Link_url_edit").hide();
+                $(".Link_title").fadeIn();
+                $(".Link_priority").fadeIn();
+                $(".Link_url").fadeIn();
+                var cid = $(this).attr("cid");
+                $(this).hide();
+                $(".delete").unbind("each").each(function () {
+                    if ($(this).attr("cid") == cid) {
+                        $(this).hide();
+                    }
+                });
+                $(".save").unbind("each").each(function () {
+                    if ($(this).attr("cid") == cid) {
+                        $(this).fadeIn();
+                    }
+                });
+                $(".Link_title").unbind("each").each(function () {
+                    if ($(this).attr("cid") == cid) {
+                        $(this).hide();
+                    }
+                });
+                $(".Link_url").unbind("each").each(function () {
+                    if ($(this).attr("cid") == cid) {
+                        $(this).hide();
+                    }
+                });
+                $(".Link_title_edit").unbind("each").each(function () {
+                    if ($(this).attr("cid") == cid) {
+                        $(this).fadeIn();
+                    }
+                });
+                $(".Link_url_edit").unbind("each").each(function () {
+                    if ($(this).attr("cid") == cid) {
+                        $(this).fadeIn();
+                    }
+                });
+                $(".Link_priority").unbind("each").each(function () {
+                    if ($(this).attr("cid") == cid) {
+                        $(this).hide();
+                    }
+                });
+                $(".Link_priority_edit").unbind("each").each(function () {
+                    if ($(this).attr("cid") == cid) {
+                        $(this).fadeIn();
+                    }
+                });
+            });
+            $(".save").click(function () {
+                var cid = $(this).attr("cid");
+                var priority, title, url;
+                $(".Link_title_edit").unbind("each").each(function () {
+                    if ($(this).attr("cid") == cid) {
+                        title = $(this).val();
+                        return;
+                    }
+                });
+                $(".Link_priority_edit").unbind("each").each(function () {
+                    if ($(this).attr("cid") == cid) {
+                        priority = $(this).val();
+                        return;
+                    }
+                });
+                $(".Link_url_edit").unbind("each").each(function () {
+                    if ($(this).attr("cid") == cid) {
+                        url = $(this).val();
+                        return;
+                    }
+                });
+                $.post("/Admin/Links",
+                    {
+                        ID: cid,
+                        Priority: priority,
+                        Title: title,
+                        URL: url
+                    }, function () {
+                        $(".Link_title").unbind("each").each(function () {
+                            if ($(this).attr("cid") == cid) {
+                                $(this).html(title);
+                            }
+                        });
+                        $(".Link_priority").unbind("each").each(function () {
+                            if ($(this).attr("cid") == cid) {
+                                $(this).html(priority);
+                            }
+                        });
+                        $(".Link_url").unbind("each").each(function () {
+                            if ($(this).attr("cid") == cid) {
+                                $(this).html(url);
+                            }
+                        });
+                        $(".save").hide();
+                        $(".delete").show();
+                        $(".modify").show();
+                        $(".Link_title_edit").hide();
+                        $(".Link_priority_edit").hide();
+                        $(".Link_url_edit").hide();
+                        $(".Link_title").fadeIn();
+                        $(".Link_url").fadeIn();
+                        $(".Link_priority").fadeIn();
+                    });
+            });
+        </script>
+    </div>
+</div>

@@ -1,0 +1,43 @@
+﻿@model IEnumerable<YunoBlog.Models.Content>
+@{
+    ViewBag.Title = "页面列表";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="article">
+    <div class="header">
+        <div class="title">页面列表</div>
+    </div>
+    <div class="section entry">
+        <p>@Html.ActionLink("新建页面", "CreateContent", "Admin", new { type = (int)ContentType.Page }, null)</p>
+        <table style="width:100%">
+            <thead>
+                <tr>
+                    <th style="max-width:50%;min-width:30%">页面标题</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.ActionLink(item.Title, "Show", "Page", new { id = item.ID }, null)</td>
+                        <td>@item.Time</td>
+                        <td>
+                            @Html.ActionLink("编辑", "EditContent", "Admin", new { id = item.ID }, null)
+                            @Html.ActionLink("删除", "DeleteContent", "Admin", new { id = item.ID }, null)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <p>
+            @Html.ActionLink("首页", "Articles", "Admin", new { id = 0 }, null)
+            @foreach (Pager item in ViewBag.PagesPager)
+            {
+                @Html.ActionLink(item.Display, "Articles", "Admin", new { id = item.ID }, null)
+            }
+            @Html.ActionLink("末页", "Articles", "Admin", new { id = ((List<Pager>)ViewBag.PagesPager).Count - 1 }, null)
+        </p>
+    </div>
+</div>

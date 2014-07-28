@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<form action="/Admin/Login" method="post">
+    <div class="article">
+        <div class="header">
+            <div class="title">登录</div>
+        </div>
+        <div class="section entry">
+            <p>用户名</p>
+            <p>
+                <input type="text" name="Username" />
+            </p>
+            <p>密码</p>
+            <p>
+                <input type="password" name="Password" />
+            </p>
+            <p>
+                <input type="submit" class="more-link" value="登录" /> @ViewBag.LoginStatus
+            </p>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,58 @@
+﻿@using YunoBlog.Models
+@model YunoBlog.Models.Content
+@{
+    ViewBag.Title = Model.Type == ContentType.Article ? "编辑文章" : "编辑页面";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="article">
+    <div class="header">
+        <div class="title">@ViewBag.Title</div>
+    </div>
+    <div class="section entry">
+        <form action="/Admin/EditContent/@Model.ID" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="ID" value="@Model.ID" />
+            <p>标题</p>
+            <p>
+                <input type="text" name="Title" value="@Model.Title" />
+            </p>
+            @if (Model.Type == ContentType.Article)
+            {
+                <p>
+                    分类
+                    <select name="CategoryID">
+                        @foreach (Category item in ViewBag.Categories)
+                        {
+                            <option value="@item.ID" @(Model.CategoryID == item.ID ? "selected" : "")>@item.Title</option>
+                        }
+                    </select>
+                </p>
+            }
+            else
+            {
+                <input type="hidden" name="CategoryID" value="" />
+            }
+            <p>
+                正文
+            </p>
+            <p>
+                <textarea id="txtContent" name="Body" style="height:500px;width:100%">@Model.Body</textarea>
+            </p>
+            <p>文件上传：<input type="file" name="File" /> &nbsp;<input type="submit" name="Upload" value="上传" /></p>
+            <p>
+                <input type="submit" class='more-link' value="提交" /> <a href="javascript:void(0)" id="btnPreview">预览</a>
+            </p>
+        </form>
+        <div id="PreviewArea">
+        </div>
+    </div>
+</div>
+<script>
+    $("#btnPreview").unbind().click(function () {
+        $.post("/Admin/Markdown", {
+            content: $("#txtContent").val()
+        }, function (data) {
+            $("#PreviewArea").html(data.replace("&lt;br /&gt;", "\r\n").replace("<br />", "\r\n"));
+            MusicPlayerEnabled();
+        });
+    });
+</script>

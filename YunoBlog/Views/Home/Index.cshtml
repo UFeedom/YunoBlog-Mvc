@@ -1,0 +1,18 @@
+﻿@{
+    ViewBag.Title = "Home";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if(Request.RequestContext.RouteData.Values["c"] == null && Request.RequestContext.RouteData.Values["y"] == null && Request.RequestContext.RouteData.Values["m"] == null)
+    {
+        <script>
+            $("#navHome").addClass("current_page_item");
+        </script>
+    }
+<script>
+    var page = 0;
+    var ArticleList = true;
+    var title = "@(Request.RequestContext.RouteData.Values["s"] == null ? "" : Request.RequestContext.RouteData.Values["s"])";
+    var category = @(Request.RequestContext.RouteData.Values["c"] == null ? "null" : Request.RequestContext.RouteData.Values["c"]);
+    var year = @(Request.RequestContext.RouteData.Values["y"] == null ? "null" : Request.RequestContext.RouteData.Values["y"]);
+    var month = @(Request.RequestContext.RouteData.Values["m"] == null ? "null" : Request.RequestContext.RouteData.Values["m"]);
+</script>

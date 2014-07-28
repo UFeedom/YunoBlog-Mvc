@@ -1,0 +1,34 @@
+﻿@model YunoBlog.Models.Config
+@{
+    ViewBag.Title = "站点信息设置";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="article">
+    <div class="header">
+        <div class="title">站点信息</div>
+    </div>
+    <div class="section entry">
+        <form action="/Admin/General" method="post">
+            <p>站点名称</p>
+            <p>
+                <input type="text" name="SiteName" style="width:400px;" value="@Model.SiteName" />
+            </p>
+            <p>Disqus帐号</p>
+            <p>
+                <input type="text" name="Disqus" style="width:400px;" value="@Model.Disqus" />
+            </p>
+            <p>管理员用户名</p>
+            <p>
+                <input type="text" name="Username" style="width:400px;" value="@Model.Username" />
+            </p>
+            <p>管理员密码</p>
+            <p>
+                <input type="password" name="Password" style="width:400px;" />
+            </p>
+            <p>
+                <input type="submit" class='more-link' value="修改" /> @ViewBag.AdminGeneralStatus
+            </p>
+        </form>
+    </div>
+</div>
